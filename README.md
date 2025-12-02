@@ -1,6 +1,6 @@
 # Jira for CSEs – Userscript
 
-**Version:** 3.2
+**Version:** 3.4
 **Author:** Allison McGill, Rita Schaff, Daniel Martínez Cisneros
 
 ---
@@ -11,7 +11,8 @@ This userscript adds quality of life updates to Jira interface for Customer Supp
 
 1. Adding Status Colors for easier readability.  
 2. Inserting a link to Patcher portal in the ticket details.  
-3. Highlighting the editor when writing internal notes for quick visual distinction.  
+3. Highlighting the editor when writing internal notes for quick visual distinction.
+4. Optional Features controlled by Toggles (via the user script menu)
 
 ---
 
@@ -23,23 +24,30 @@ This userscript adds quality of life updates to Jira interface for Customer Supp
 " />
 
 ### 2. Patcher Link Field
-- Automatically adds a **Patcher portal link** in the details field.  
+- Automatically adds a Patcher portal link in the details field.  
 <img width="578" height="299" alt="image" src="https://github.com/user-attachments/assets/b981c349-0f10-4783-b36a-9863d6a2e184" />
 
 ### 3. Internal Note Highlight
-- Highlights the editor **yellow** when writing internal notes.
+- Highlights the editor yellow when writing internal notes.
 <img width="1023" height="319" alt="image" src="https://github.com/user-attachments/assets/e71499ec-f1cd-476d-ba06-19a1b1b95bc6" />
 
-### 3. Customer Portal Links
-- Automatically adds a link to the **Customer Portal** in the details field.
+### 4. Customer Portal Link
+- Automatically adds a Customer portal link in the details field. 
+<img width="1023" height="319" alt="image" src="https://github.com/user-attachments/assets/e71499ec-f1cd-476d-ba06-19a1b1b95bc6" />
+
+
+## Optional Features can be toggled on or off using the userscript menu accessible via your userscript manager
+- **Disable Jira Shortcuts**: Prevents Jira’s keyboard shortcuts from triggering while typing.  
+- **Open Tickets in Background Tab**: Opens Jira issue links in a new browser tab without navigating away from your current tab.
+
+<img width="825" height="765" alt="image" src="https://github.com/user-attachments/assets/bad62af9-6162-4a59-bbce-e7ab9c5db630" />
 
 ---
 
 ## Installation
 
-1. Install a userscript manager like [Tampermonkey](https://www.tampermonkey.net/).
+1. Install a userscript manager like TamperMonkey:
+- chrome: https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en
+- firefox: https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/
 2. Create a new userscript and paste the code from `Jira for CSEs.user.js`.  
 3. Save and reload Jira pages.
-
-
-
