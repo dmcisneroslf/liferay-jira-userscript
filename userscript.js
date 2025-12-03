@@ -3,7 +3,7 @@
 // @author       Ally, Rita, Dmcisneros
 // @icon         https://www.liferay.com/o/classic-theme/images/favicon.ico
 // @namespace    https://liferay.atlassian.net/
-// @version      3.3
+// @version      3.4
 // @description  Jira statuses + Patcher and CP Link field + Internal Note highlight
 // @match        https://liferay.atlassian.net/*
 // @updateURL    https://github.com/AllyMech14/liferay-jira-userscript/raw/refs/heads/main/userscript.js
