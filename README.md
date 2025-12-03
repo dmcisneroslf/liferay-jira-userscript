@@ -39,7 +39,8 @@ This userscript adds quality of life updates to Jira interface for Customer Supp
 
 ### 5. Account tickets Link
 - Automatically adds a link to tickets for the account in the details field. 
-<img width="583" height="99" alt="image" src="" />
+<img width="2097" height="658" alt="image" src="https://github.com/user-attachments/assets/b72b8ce3-e05c-4f5e-add3-49190911be3f" />
+
 
 
 
