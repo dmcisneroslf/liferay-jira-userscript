@@ -3,9 +3,10 @@
 // @author       Ally, Rita, Dmcisneros
 // @icon         https://www.liferay.com/o/classic-theme/images/favicon.ico
 // @namespace    https://liferay.atlassian.net/
-// @version      3.6
-// @description  Jira statuses + Patcher, Account tickets and CP Link field + Internal Note highlight
+// @version      3.7
+// @description  Jira statuses + Patcher, Account tickets and CP Link field + Internal Note highlight + Auto Expand CCC Info
 // @match        https://liferay.atlassian.net/*
+// @match        https://liferay-sandbox-424.atlassian.net/*
 // @updateURL    https://github.com/AllyMech14/liferay-jira-userscript/raw/refs/heads/main/userscript.js
 // @downloadURL  https://github.com/AllyMech14/liferay-jira-userscript/raw/refs/heads/main/userscript.js
 // @grant        GM_getValue
@@ -460,9 +461,9 @@
         highPriorityIcons.forEach(icon => {
             // Check if the flame icon has already been added to avoid duplicates
             if (icon.closest('.flame-icon-wrapper')) {
-                return; 
+                return;
             }
-            
+
             // Create the flame icon element
             const flameIcon = document.createElement('span');
             flameIcon.textContent = '🔥'; // The flame emoji
@@ -474,33 +475,82 @@
             wrapper.style.display = 'inline-flex';
             wrapper.style.alignItems = 'center';
 
-            // Check if the icon is already wrapped, and if so, unwrap it first 
+            // Check if the icon is already wrapped, and if so, unwrap it first
             // to place the new wrapper correctly (optional defensive coding)
             const parent = icon.parentNode;
-            
+
             // Move the original icon into the wrapper
             wrapper.appendChild(icon.cloneNode(true)); // Clone the icon to move it
-            
+
             // Add the flame icon to the wrapper
             wrapper.appendChild(flameIcon);
 
             // Replace the original icon with the new wrapper
-            parent.replaceChild(wrapper, icon); 
+            parent.replaceChild(wrapper, icon);
         });
     }
+
+    /*********** https://liferay.atlassian.net/browse/LRSUPPORT-47251 ***********/
+   function expandCCCInfo() {
+        // 1. Define the headers we want to target
+        const targetHeaders = [
+            "CCC Account Info",
+            "CCC Infrastructure Info",
+            "CCC SaaS Maintenance Info"
+        ];
+
+        // 2. Find all headers (h3) and all Object Cards on the page
+        const allHeaders = Array.from(document.querySelectorAll('h3'));
+        const allCards = document.querySelectorAll('[data-testid="issue-field-cmdb-object-lazy.ui.card.cmdb-object-card"]');
+
+        // 3. Iterate through every card found
+        allCards.forEach(card => {
+            // Find the header that this card belongs to.
+            // We do this by filtering headers that appear BEFORE this specific card,
+            // and taking the last one (the nearest one).
+            const precedingHeaders = allHeaders.filter(h =>
+                (h.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING)
+            );
+
+            const nearestHeader = precedingHeaders.length > 0 ? precedingHeaders[precedingHeaders.length - 1] : null;
+
+            // 4. Check if the nearest header is one of our targets
+            if (nearestHeader && targetHeaders.includes(nearestHeader.textContent.trim())) {
+
+                // 5. Find the Expand Button inside this specific card
+                const buttons = card.querySelectorAll('button');
+                let expandBtn = null;
+
+                buttons.forEach(btn => {
+                    const testId = btn.getAttribute('data-testid') || "";
+                    // Select the button that is NOT "View Details" or "Edit"
+                    if (!testId.includes('button-view-details') && !testId.includes('button-edit')) {
+                        expandBtn = btn;
+                    }
+                });
+
+                // 6. Click logic with Mutation Guard
+                if (expandBtn && !expandBtn.hasAttribute('data-userscript-auto-expanded')) {
+                    expandBtn.click();
+                    expandBtn.setAttribute('data-userscript-auto-expanded', 'true');
+                }
+            }
+        });
+    }
+
 
     /*
       OPTIONAL FEATURES
       1. Disable JIRA Shortcuts
       2. Open Tickets In a New Tab
-    
+
       How to Use:
       1. Go to TamperMonkey Icon in the browser
       2. Enable/Disable Features
       3. Refresh Jira for changes to change affect
-    
+
       Note: The features are disabled by default.
-    
+
         ===============================================================================
         */
     /*********** TOGGLE MENU ***********/
@@ -575,6 +625,7 @@
         await createCustomerPortalField();
         removeSignatureFromInternalNote();
         addFlameIconToHighPriority();
+        expandCCCInfo();
     }
 
     await updateUI();
