@@ -544,6 +544,8 @@
         const targetDiv = document.querySelector(divSelector);
     
         if (targetDiv) {
+            targetDiv.style.whiteSpace = 'pre-wrap';
+
             const originalText = targetDiv.textContent;
             const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
     
