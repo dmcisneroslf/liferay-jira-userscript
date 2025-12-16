@@ -3,7 +3,7 @@
 // @author       Ally, Rita, Dmcisneros
 // @icon         https://www.liferay.com/o/classic-theme/images/favicon.ico
 // @namespace    https://liferay.atlassian.net/
-// @version      3.7
+// @version      3.8
 // @description  Jira statuses + Patcher, Account tickets and CP Link field + Internal Note highlight + Auto Expand CCC Info
 // @match        https://liferay.atlassian.net/*
 // @match        https://liferay-sandbox-424.atlassian.net/*
@@ -536,6 +536,27 @@
                 }
             }
         });
+        setTimeout(transformLinks, 500); //Convert links elements
+    }
+
+    function transformLinks() {
+        const divSelector = 'div[data-testid="insight-attribute-list-text-attribute-text"]';
+        const targetDiv = document.querySelector(divSelector);
+    
+        if (targetDiv) {
+            const originalText = targetDiv.textContent;
+            const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
+    
+            const linkedHtml = originalText.replace(urlRegex, (url) => {
+                let href = url;
+                if (!url.match(/^https?:\/\//i)) {
+                    href = 'http://' + url;
+                }
+                return `<a href="${href}" target="_blank">${url}</a>`;
+            });
+    
+            targetDiv.innerHTML = linkedHtml;
+        }
     }
 
 
@@ -623,7 +644,7 @@
         createJiraFilterLinkField();
         highlightEditor();
         await createCustomerPortalField();
-        removeSignatureFromInternalNote();
+       // removeSignatureFromInternalNote();
         addFlameIconToHighPriority();
         expandCCCInfo();
     }
