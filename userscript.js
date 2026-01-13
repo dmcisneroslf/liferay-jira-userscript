@@ -3,7 +3,7 @@
 // @author       Ally, Rita, Dmcisneros
 // @icon         https://www.liferay.com/o/classic-theme/images/favicon.ico
 // @namespace    https://liferay.atlassian.net/
-// @version      3.10
+// @version      3.11
 // @description  Jira statuses + Patcher, Account tickets and CP Link field + Internal Note highlight + Auto Expand CCC Info + colorize solution proposed
 // @match        https://liferay.atlassian.net/*
 // @match        https://liferay-sandbox-424.atlassian.net/*
@@ -166,12 +166,21 @@
         referenceField.parentNode.insertBefore(clone, referenceField.nextSibling);
     }
 
-    /*********** ADD COLOR TO PROPOSED SOLUTION ***********/
+     /*********** ADD COLOR TO PROPOSED SOLUTION ***********/
     function addColorToProposedSolution() {
         const proposedSolutionDiv = document.querySelector('[data-testid="issue.views.field.rich-text.customfield_10278"]');
-        proposedSolutionDiv.style.setProperty('background-color', '#1C3329', 'important');
-        proposedSolutionDiv.style.setProperty('padding', '10px');
-        proposedSolutionDiv.style.setProperty('marging', '10px');
+        
+        if (!proposedSolutionDiv) return;
+    
+        const colorMode = document.documentElement.dataset.colorMode;
+        const bgColor = (colorMode === 'dark') 
+            ? '#1C3329' 
+            : 'var(--ds-background-accent-green-subtlest, #E3FCEF)';
+    
+        proposedSolutionDiv.style.setProperty('background-color', bgColor, 'important');
+        proposedSolutionDiv.style.setProperty('padding', '10px', 'important');
+        proposedSolutionDiv.style.setProperty('margin', '10px', 'important'); // Corregido 'marging'
+        proposedSolutionDiv.style.setProperty('border-radius', '4px'); // Opcional: para que se vea mejor
     }
 
 
