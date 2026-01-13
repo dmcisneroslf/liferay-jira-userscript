@@ -3,8 +3,8 @@
 // @author       Ally, Rita, Dmcisneros
 // @icon         https://www.liferay.com/o/classic-theme/images/favicon.ico
 // @namespace    https://liferay.atlassian.net/
-// @version      3.9
-// @description  Jira statuses + Patcher, Account tickets and CP Link field + Internal Note highlight + Auto Expand CCC Info
+// @version      3.10
+// @description  Jira statuses + Patcher, Account tickets and CP Link field + Internal Note highlight + Auto Expand CCC Info + colorize solution proposed
 // @match        https://liferay.atlassian.net/*
 // @match        https://liferay-sandbox-424.atlassian.net/*
 // @updateURL    https://github.com/AllyMech14/liferay-jira-userscript/raw/refs/heads/main/userscript.js
@@ -164,6 +164,14 @@
 
         // Insert the new field after the Patcher Link field
         referenceField.parentNode.insertBefore(clone, referenceField.nextSibling);
+    }
+
+    /*********** ADD COLOR TO PROPOSED SOLUTION ***********/
+    function addColorToProposedSolution() {
+        const proposedSolutionDiv = document.querySelector('[data-testid="issue.views.field.rich-text.customfield_10278"]');
+        proposedSolutionDiv.style.setProperty('background-color', '#1C3329', 'important');
+        proposedSolutionDiv.style.setProperty('padding', '10px');
+        proposedSolutionDiv.style.setProperty('marging', '10px');
     }
 
 
@@ -653,6 +661,7 @@
        // removeSignatureFromInternalNote();
         addFlameIconToHighPriority();
         expandCCCInfo();
+        addColorToProposedSolution();
     }
 
     await updateUI();
