@@ -106,32 +106,27 @@
     /*********** INTERNAL REQUEST TOP BAR WARNING ***********/
 
     function isInternalRequest() {
-        // 1. Check Project
         const project = getTicketType();
         if (project !== 'LRHC') return false;
 
-        // 2. Locate Request Type field (using the ID from your HTML snippet)
         const requestTypeElement = document.querySelector('[data-testid*="customfield_10010"]');
-
-        // 3. Unsafe Browse Protection: If element missing, do nothing (return false)
         if (!requestTypeElement) return false;
 
-        // 4. Strict Check: Only return true if "Internal Request" is found
         const text = requestTypeElement.textContent || "";
         return text.includes("Internal Request");
     }
 
     function checkInternalRequestWarning() {
         const existingWarning = document.getElementById('internal-request-warning-bar');
-        const shouldShow = isInternalRequest();
+        const showWarning = isInternalRequest();
 
-        if (shouldShow) {
-            if (existingWarning) return; 
+        if (showWarning) {
+            if (existingWarning) return;
 
             const warningBar = document.createElement('div');
             warningBar.id = 'internal-request-warning-bar';
             warningBar.style.cssText = `
-                background-color: #FFAB00; 
+                background-color: #FFAB00;
                 color: #172B4D;
                 text-align: center;
                 padding: 10px;
@@ -147,17 +142,18 @@
 
             const linkUrl = "https://liferay.atlassian.net/wiki/spaces/SUPPORT/pages/4096557057/JSM+Agent+Overview#How-To-Publish-an-Internal-Request-to-customers";
             warningBar.innerHTML = `
-                ⚠️ Manually changing the request type to General Request will not publish the ticket by itself. 
-                To avoid issues, use the automation in publish of internal requests. 
+                ⚠️ Manually changing the request type to General Request will not publish the ticket by itself.
+                To avoid issues, use the automation in publish of internal requests.
                 <a href="${linkUrl}" target="_blank" style="color: #0052CC; text-decoration: underline; margin-left: 5px;">More info here.</a>
             `;
 
             document.body.prepend(warningBar);
             document.body.style.paddingTop = '40px';
-        } else if (existingWarning) {
-            // Remove it immediately if the user changes the type to General Request
-            existingWarning.remove();
-            document.body.style.paddingTop = '0px';
+        } else {
+            if (existingWarning) {
+                existingWarning.remove();
+                document.body.style.paddingTop = '0px';
+            }
         }
     }
 
@@ -227,18 +223,18 @@
      /*********** ADD COLOR TO PROPOSED SOLUTION ***********/
     function addColorToProposedSolution() {
                const proposedSolutionDiv = document.querySelector('[data-testid="issue.views.field.rich-text.customfield_10278"]');
-        
+
         if (!proposedSolutionDiv) return;
 
         const textContent = proposedSolutionDiv.textContent.trim();
 
         if (textContent === "None") return;
-    
+
         const colorMode = document.documentElement.dataset.colorMode;
-        const bgColor = (colorMode === 'dark') 
-            ? '#1C3329' 
+        const bgColor = (colorMode === 'dark')
+            ? '#1C3329'
             : 'var(--ds-background-accent-green-subtlest, #E3FCEF)';
-    
+
         proposedSolutionDiv.style.setProperty('background-color', bgColor, 'important');
         proposedSolutionDiv.style.setProperty('padding', '10px', 'important');
         proposedSolutionDiv.style.setProperty('margin', '10px', 'important'); // Corregido 'marging'
@@ -468,9 +464,9 @@
     function highlightEditor() {
         // Check if the issue transition modal is being used
         const transitionModal = document.querySelector('section[data-testid="issue-transition.ui.issue-transition-modal"]');
-    
+
         let editorWrapper, editor, internalNoteButton;
-    
+
         if (transitionModal) {
             const commentContainer = transitionModal.querySelector('#comment-container');
             if (commentContainer) {
@@ -478,22 +474,22 @@
                 editor = commentContainer.querySelector('#ak-editor-textarea') || commentContainer.querySelector('textarea');
                 internalNoteButton = document.getElementById('issue-transition-comment-editor-container-tabs-0');
             }
-    
+
         } else {
             editorWrapper = document.querySelector('.css-sox1a6');
             editor = document.querySelector('#ak-editor-textarea');
             internalNoteButton = document.querySelector('#comment-editor-container-tabs-0');
         }
-    
+
         const isInternalSelected = internalNoteButton && internalNoteButton.getAttribute('aria-selected') === 'true';
-    
+
         if (isInternalSelected) {
-    
+
             if (editorWrapper) {
                 editorWrapper.style.setProperty('background-color', '#FFFACD', 'important'); // pale yellow
                 editorWrapper.style.setProperty('border', '2px solid #FFD700', 'important'); // golden border
                 editorWrapper.style.setProperty('transition', 'background-color 0.3s, border 0.3s', 'important');
-    
+
                 //Added back color font for Internal Note on Dark Mode
                 editorWrapper.style.setProperty('color', '#000000', 'important'); // back color font
             }
@@ -739,7 +735,7 @@
         createPatcherField();
         createJiraFilterLinkField();
         highlightEditor();
-        checkInternalRequestWarning(); // <--- NEW FEATURE
+        checkInternalRequestWarning();
         await createCustomerPortalField();
        // removeSignatureFromInternalNote();
         addFlameIconToHighPriority();
